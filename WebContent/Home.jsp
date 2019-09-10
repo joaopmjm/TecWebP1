@@ -30,6 +30,7 @@
 	//System.out.println("ID: "+ iduser);
 %>
 <h1>Usuário: <%=user.getNome() %></h1>
+<form action="login.jsp"><input type="submit" value="Logout">Logout</input></form>
 
 <table>
 	<tr>

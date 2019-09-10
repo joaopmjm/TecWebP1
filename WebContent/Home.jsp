@@ -9,12 +9,49 @@
 <body>
 <%@ page import="java.util.*, br.edu.insper.Model.*" %>
 <%	DAO dao = new DAO();
-	List<Post> posts = dao.getPosts();
+	String ordered = (String) request.getAttribute("order");
+	String filtered = (String) request.getAttribute("filter");
+	System.out.println("ordenar " +ordered + "   filtrar " + filtered);
+	List<Post> posts;
+	List<User> users = dao.getUsers();
+	if (ordered != null) {
+		posts = dao.getPosts("ordenar", null);
+	}else if (filtered != null){
+		posts = dao.getPosts("filtrar", filtered);
+		if (posts.isEmpty()){
+			posts = dao.getPosts();
+			out.println("<h6>Usuario filtrado inexistente</h6>");
+		}
+	}else{
+		posts = dao.getPosts();
+	}
 	String iduser = String.valueOf(request.getAttribute("iduser"));
 	User user = dao.getUser(iduser);
-	System.out.println("ID: "+ iduser);
+	//System.out.println("ID: "+ iduser);
 %>
 <h1>Usuário: <%=user.getNome() %></h1>
+
+<table>
+	<tr>
+		<td>Ordenar</td><td>filtrar por usuario</td>
+	</tr>
+	<tr>
+		<td>
+			<form method="post" action="Ordenar">
+				<input type="hidden" name="iduser" value=<%=iduser %>>
+				<input type="submit" value="Ordenar por autor">
+			</form>
+		</td>
+		<td>
+			<form method="post" name="drop" action="Filtrar">
+				<input type="hidden" name="iduser" value=<%=iduser %>>
+				<input type="text" name="user_filtro">
+				<input type="submit">
+				</form>
+		</td>
+	</tr>
+	
+</table>
 <table border="1">
 	<tr><td>Pergunta</td><td>Autor</td><td>TimeStamp</td></tr>
 	<% for (Post post : posts){ %>

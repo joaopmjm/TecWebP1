@@ -23,14 +23,14 @@
 				<input type="text" name="perguntaModificada" value="<%=pergunta.getTexto() %>">
 				<input type="hidden" name="idperguntaModificada" value=<%=pergunta.getId() %>>
 				<input type="hidden" name="idautor" value=<%=iduser %>>
-				<input type="submit" name="submit">
+				<input type="submit" value="Modificar">
 			</form>
 		<% } %>
 	<% }else{ %>
 		<form method="post" action="Adicionar">
 			<input type="text" name="pergunta">
 			<input type="hidden" name="idautor" value=<%=iduser %>>
-			<input type="submit">
+			<input type="submit" value="Adicionar">
 		</form>
 	<% }
 	%>

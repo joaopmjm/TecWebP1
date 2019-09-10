@@ -51,7 +51,37 @@ public class DAO {
 		
 		PreparedStatement stmt;
 		stmt = connection.prepareStatement("SELECT user.nome, pergunta.texto, pergunta.id, pergunta.idautor FROM pergunta, user WHERE user.id = pergunta.idautor");
-//		stmt = connection.prepareStatement("SELECT * FROM pergunta");
+		ResultSet rs = stmt.executeQuery();
+		try {
+			while (rs.next()) {
+				Post post = new Post();
+				User user = new User(); 
+				post.setId(rs.getInt("id"));
+				post.setTexto(rs.getString("texto"));
+				user.setNome(rs.getString("nome"));
+				user.setId(rs.getInt("idautor"));
+				post.setAutor(user);
+				posts.add(post);
+			}
+		}catch (Exception e) {
+			e.fillInStackTrace();
+		}
+		rs.close();	
+		stmt.close();
+		return posts;
+	}
+	public List<Post> getPosts(String i,String filtro) throws SQLException{
+		List<Post> posts = new ArrayList<Post>();
+		
+		PreparedStatement stmt;
+		String sql = "";
+		if (i == "ordenar") {
+			sql = "SELECT user.nome, pergunta.texto, pergunta.id, pergunta.idautor FROM pergunta, user WHERE user.id = pergunta.idautor ORDER BY user.id";
+		}else if(i == "filtrar") {
+			sql = "SELECT user.nome, pergunta.texto, pergunta.id, pergunta.idautor FROM pergunta, user WHERE user.id = pergunta.idautor AND user.nome='" + filtro + "'";
+			System.out.println(sql);
+		}
+		stmt = stmt = connection.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		try {
 			while (rs.next()) {
